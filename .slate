@@ -1,8 +1,7 @@
-# Config
-config defaultToCurrentScreen true
-config secondsBetweenRepeat 0.1
-config checkDefaultsOnLoad true
-config focusCheckWidthMax 3000
+# # # # # # # # # # # # # # # # # # # #
+#              Aliases                #
+# # # # # # # # # # # # # # # # # # # #
+
 alias half screenSizeX/2
 alias third screenSizeX/3
 
