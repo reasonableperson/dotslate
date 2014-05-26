@@ -1,0 +1,74 @@
+# Config
+config defaultToCurrentScreen true
+config secondsBetweenRepeat 0.1
+config checkDefaultsOnLoad true
+config focusCheckWidthMax 3000
+alias half screenSizeX/2
+alias third screenSizeX/3
+
+# # # # # # # # # # # # # # # # # # # #
+#         Window positioning          #
+# # # # # # # # # # # # # # # # # # # #
+
+# Resize
+bind right:cmd;ctrl resize +64 +0
+bind left:cmd;ctrl  resize -64 +0
+bind down:cmd;ctrl resize  +0   +64
+bind up:cmd;ctrl  resize   +0   -64
+
+# Nudge (move)
+bind right:cmd;ctrl;shift  nudge +64 +0
+bind left:cmd;ctrl;shift   nudge -64 +0
+bind up:cmd;ctrl;shift     nudge +0 -64
+bind down:cmd;ctrl;shift   nudge +0 +64
+
+# Whole
+bind 1:1;ctrl move 0;0 screenSizeX;screenSizeY
+
+# Halves
+bind 2:1;ctrl move screenOriginX;0 ${half};screenSizeY
+bind 2:2;ctrl move screenOriginX+${half};0 ${half};screenSizeY
+
+# Thirds
+bind 3:1;ctrl move screenOriginX+0;0 ${third};screenSizeY
+bind 3:2;ctrl move screenOriginX+${third};0 ${third};screenSizeY
+bind 3:3;ctrl move screenOriginX+2*${third};0 ${third};screenSizeY
+bind 3:4;ctrl move screenOriginX+0;0 2*${third};screenSizeY
+
+# Vsplit
+bind 1:4;ctrl move windowTopLeftX;0 windowSizeX;screenSizeY/2
+bind 2:4;ctrl move windowTopLeftX;screenSizeY/2 windowSizeX;screenSizeY/2
+
+# Throw to screen
+bind 9:e;ctrl throw left
+bind 0:e;ctrl throw right
+
+# Throw to edge
+bind l:e;ctrl  push right
+bind h:e;ctrl  push left
+bind k:e;ctrl  push up
+bind j:e;ctrl  push down
+
+# # # # # # # # # # # # # # # # # # # #
+#        Application-specific         #
+# # # # # # # # # # # # # # # # # # # #
+
+bind t:e;ctrl focus 'iTerm'
+bind c:e;ctrl focus 'Google Chrome'
+bind p:e;ctrl focus 'Preview'
+bind a:e;ctrl focus 'Adium'
+bind f:e;ctrl focus 'Finder'
+bind x:e;ctrl focus 'Microsoft Excel'
+bind m:e;ctrl focus 'Mou'
+bind i:e;ctrl focus 'iTunes'
+bind w:e;ctrl focus 'VMware Fusion'
+
+# # # # # # # # # # # # # # # # # # # #
+#               Slate                 #
+# # # # # # # # # # # # # # # # # # # #
+
+bind e:e;ctrl   hint
+bind r:cmd;ctrl relaunch
+bind s:cmd;ctrl snapshot mySlate save-to-disk;stack
+bind q:e;ctrl   grid padding:5 0:3,2
+# bind tab:cmd switch
