@@ -2,8 +2,11 @@
 #              Aliases                #
 # # # # # # # # # # # # # # # # # # # #
 
-alias half screenSizeX/2
+alias half  screenSizeX/2
 alias third screenSizeX/3
+alias ox    screenOriginX
+alias w     screenSizeX
+alias h     screenSizeY
 
 # # # # # # # # # # # # # # # # # # # #
 #         Window positioning          #
@@ -22,21 +25,21 @@ bind up:cmd;ctrl;shift     nudge +0 -64
 bind down:cmd;ctrl;shift   nudge +0 +64
 
 # Whole
-bind 1:1;ctrl move 0;0 screenSizeX;screenSizeY
+bind 1:1;ctrl move ${ox}+0;0 ${w};${h}
 
 # Halves
-bind 2:1;ctrl move screenOriginX;0 ${half};screenSizeY
-bind 2:2;ctrl move screenOriginX+${half};0 ${half};screenSizeY
+bind 2:1;ctrl move ${ox};0 ${half};${h}
+bind 2:2;ctrl move ${ox}+${half};0 ${half};${h}
 
 # Thirds
-bind 3:1;ctrl move screenOriginX+0;0 ${third};screenSizeY
-bind 3:2;ctrl move screenOriginX+${third};0 ${third};screenSizeY
-bind 3:3;ctrl move screenOriginX+2*${third};0 ${third};screenSizeY
-bind 3:4;ctrl move screenOriginX+0;0 2*${third};screenSizeY
+bind 3:1;ctrl move ${ox}+0;0 ${third};${h}
+bind 3:2;ctrl move ${ox}+${third};0 ${third};${h}
+bind 3:3;ctrl move ${ox}+2*${third};0 ${third};${h}
+bind 3:4;ctrl move ${ox}+0;0 2*${third};${h}
 
 # Vsplit
-bind 1:4;ctrl move windowTopLeftX;0 windowSizeX;screenSizeY/2
-bind 2:4;ctrl move windowTopLeftX;screenSizeY/2 windowSizeX;screenSizeY/2
+bind 1:4;ctrl move windowTopLeftX;0 windowSizeX;${h}/2
+bind 2:4;ctrl move windowTopLeftX;${h}/2 windowSizeX;${h}/2
 
 # Throw to screen
 bind 9:e;ctrl throw left
