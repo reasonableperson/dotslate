@@ -30,6 +30,7 @@ bind 1:1;ctrl move ${ox}+0;0 ${w};${h}
 # Halves
 bind 2:1;ctrl move ${ox};0 ${half};${h}
 bind 2:2;ctrl move ${ox}+${half};0 ${half};${h}
+bind =:e;ctrl move ${ox}+${w}/4;0 ${half};${h}
 
 # Thirds
 bind 3:1;ctrl move ${ox}+0;0 ${third};${h}
@@ -46,8 +47,8 @@ bind 9:e;ctrl throw left
 bind 0:e;ctrl throw right
 
 # Throw to edge
-bind l:e;ctrl  push right
-bind h:e;ctrl  push left
+bind ]:e;ctrl  push right
+bind [:e;ctrl  push left
 bind k:e;ctrl  push up
 bind j:e;ctrl  push down
 
@@ -64,6 +65,7 @@ bind x:e;ctrl focus 'Microsoft Excel'
 bind m:e;ctrl focus 'Mou'
 bind i:e;ctrl focus 'iTunes'
 bind w:e;ctrl focus 'VMware Fusion'
+bind v:e;ctrl focus 'Cisco AnyConnect Secure Mobility Client'
 
 # # # # # # # # # # # # # # # # # # # #
 #               Slate                 #
