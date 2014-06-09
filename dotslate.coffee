@@ -34,12 +34,11 @@ resizeFrac = (p, q, subsplit = false) ->
         else                      h = scr.height * p / q
 
         # Stick to edges
-        anchor = 'top-left'
         edges = closeEdges(win)
-        if widescreen and 'right' in edges and 'left' not in edges
-            anchor = 'top-right'
-        if not widescreen and 'bottom' in edges and 'top' not in edges
-            anchor = 'bottom-left'
+        [vAnchor, hAnchor] = ['top', 'left']
+        if 'right' in edges and 'left' not in edges then hAnchor = 'right'
+        if 'bottom' in edges and 'top' not in edges then vAnchor = 'bottom'
+        anchor = "#{vAnchor}-#{hAnchor}"
 
         # carry out operations
         win.doOperation slate.operation "corner", {direction: anchor, width: w, height: h}
@@ -65,5 +64,5 @@ throwPreservingFrac = (increment) ->
         win.doOperation slate.operation 'throw', {screen: screenId}
         resizeFrac(proportion, 1) win
 
-slate.bind "[:e;ctrl;cmd", throwPreservingFrac -1
-slate.bind "]:e;ctrl;cmd", throwPreservingFrac 1
+slate.bind "9:e;ctrl", throwPreservingFrac -1
+slate.bind "0:e;ctrl", throwPreservingFrac 1
