@@ -1,5 +1,8 @@
 slate.log "Running dotslate.coffee."
 
+# Fix JS's buggy modulo function.
+mod = (n, m) -> ((n % m) + m) % m
+
 # What edges is this window close to? 
 closeEdges = (win) ->
     scr = win.screen().rect()
@@ -30,18 +33,16 @@ resizeFrac = (p, q, subsplit = false) ->
         if scaleHorizontally then w = scr.width  * p / q
         else                      h = scr.height * p / q
 
-        # work out if we need to push the window        
+        # Stick to edges
+        anchor = 'top-left'
         edges = closeEdges(win)
-        # slate.log "widescreen?", widescreen, "edges", edges
-        if widescreen and 'right' in edges
-            push = slate.operation 'push', {direction: 'right'}
-        if not widescreen and 'bottom' in edges
-            push = slate.operation 'push', {direction: 'bottom'}
+        if widescreen and 'right' in edges and 'left' not in edges
+            anchor = 'top-right'
+        if not widescreen and 'bottom' in edges and 'top' not in edges
+            anchor = 'bottom-left'
 
         # carry out operations
-        win.doOperation slate.operation "move", {x: scr.x, y: scr.y, width: w, height: h}
-        slate.log push
-        if push then win.doOperation push
+        win.doOperation slate.operation "corner", {direction: anchor, width: w, height: h}
 
 # Fractional resize bindings
 bindFrac = (p, q) ->
@@ -53,16 +54,16 @@ bindFrac 1, q for q in [1, 2, 3, 4]
 bindFrac p, q for [p, q] in [[2, 3], [3, 4]]
 
 # Throw + fractional resize
-throwPreservingFrac = (screenId) ->
+throwPreservingFrac = (increment) ->
     (win) ->
         scr = win.screen().rect()
         wrc = win.rect()
         widescreen = scr.width > scr.height
         dim = if widescreen then 'width' else 'height'
         proportion = wrc[dim] / scr[dim]
-        op = slate.operation 'throw', {screen: screenId}
-        win.doOperation op
+        screenId = mod(slate.screen().id() + increment, slate.screenCount())
+        win.doOperation slate.operation 'throw', {screen: screenId}
         resizeFrac(proportion, 1) win
 
-slate.bind "9:e;ctrl", throwPreservingFrac 0
-slate.bind "0:e;ctrl", throwPreservingFrac 1
+slate.bind "[:e;ctrl;cmd", throwPreservingFrac -1
+slate.bind "]:e;ctrl;cmd", throwPreservingFrac 1
