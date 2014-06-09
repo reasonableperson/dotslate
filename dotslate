@@ -24,20 +24,6 @@ bind left:cmd;ctrl;shift   nudge -64 +0
 bind up:cmd;ctrl;shift     nudge +0 -64
 bind down:cmd;ctrl;shift   nudge +0 +64
 
-# Whole
-bind 1:1;ctrl move ${ox}+0;0 ${w};${h}
-
-# Halves
-bind 2:1;ctrl move ${ox};0 ${half};${h}
-bind 2:2;ctrl move ${ox}+${half};0 ${half};${h}
-bind =:e;ctrl move ${ox}+${w}/4;0 ${half};${h}
-
-# Thirds
-bind 3:1;ctrl move ${ox}+0;0 ${third};${h}
-bind 3:2;ctrl move ${ox}+${third};0 ${third};${h}
-bind 3:3;ctrl move ${ox}+2*${third};0 ${third};${h}
-bind 3:4;ctrl move ${ox}+0;0 2*${third};${h}
-
 # Vsplit
 bind 1:4;ctrl move windowTopLeftX;0 windowSizeX;${h}/2
 bind 2:4;ctrl move windowTopLeftX;${h}/2 windowSizeX;${h}/2
@@ -52,16 +38,39 @@ bind [:e;ctrl  push left
 bind k:e;ctrl  push up
 bind j:e;ctrl  push down
 
+# Spaces
+# bind [:e;ctrl shell '/usr/bin/osascript -e "tell application \"System Events\" to key code 33 using control down"'
+# bind ]:e;ctrl shell '/usr/bin/osascript -e "tell application \"System Events\" to key code 30 using control down"'
+
+# Layouts
+layout work 'Google Chrome' move 0;0 2*${third};${h}
+layout work 'iTerm' move 2*${third};0 ${third};${h}-5*64
+layout work 'Adium' move 2*${third};${h}-5*64 ${third};5*64
+default work count:2
+bind 8:e;ctrl layout work
+
+layout laptop 'Google Chrome' move 0;0 2*${third};${h}
+layout laptop 'Microsoft Outlook' move 0;0 2*${third};${h}
+layout laptop 'iTerm' move 2*${third};0 ${third};${h}
+default laptop count:1
+bind 7:e;ctrl layout laptop
+
 # # # # # # # # # # # # # # # # # # # #
 #        Application-specific         #
 # # # # # # # # # # # # # # # # # # # #
+
+bind h:e;ctrl  focus left
+bind l:e;ctrl  focus right
 
 bind t:e;ctrl focus 'iTerm'
 bind c:e;ctrl focus 'Google Chrome'
 bind p:e;ctrl focus 'Preview'
 bind a:e;ctrl focus 'Adium'
 bind f:e;ctrl focus 'Finder'
+bind g:e;ctrl focus 'Mail'
 bind x:e;ctrl focus 'Microsoft Excel'
+bind d:e;ctrl focus 'Microsoft Word'
+bind o:e;ctrl focus 'Microsoft Outlook'
 bind m:e;ctrl focus 'Mou'
 bind i:e;ctrl focus 'iTunes'
 bind w:e;ctrl focus 'VMware Fusion'
