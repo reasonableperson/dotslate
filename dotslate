@@ -24,14 +24,6 @@ bind left:cmd;ctrl;shift   nudge -64 +0
 bind up:cmd;ctrl;shift     nudge +0 -64
 bind down:cmd;ctrl;shift   nudge +0 +64
 
-# Vsplit
-bind 1:4;ctrl move windowTopLeftX;0 windowSizeX;${h}/2
-bind 2:4;ctrl move windowTopLeftX;${h}/2 windowSizeX;${h}/2
-
-# Throw to screen
-bind 9:e;ctrl throw left
-bind 0:e;ctrl throw right
-
 # Throw to edge
 bind ]:e;ctrl  push right
 bind [:e;ctrl  push left
@@ -42,19 +34,6 @@ bind j:e;ctrl  push down
 # bind [:e;ctrl shell '/usr/bin/osascript -e "tell application \"System Events\" to key code 33 using control down"'
 # bind ]:e;ctrl shell '/usr/bin/osascript -e "tell application \"System Events\" to key code 30 using control down"'
 
-# Layouts
-layout work 'Google Chrome' move 0;0 2*${third};${h}
-layout work 'iTerm' move 2*${third};0 ${third};${h}-5*64
-layout work 'Adium' move 2*${third};${h}-5*64 ${third};5*64
-default work count:2
-bind 8:e;ctrl layout work
-
-layout laptop 'Google Chrome' move 0;0 2*${third};${h}
-layout laptop 'Microsoft Outlook' move 0;0 2*${third};${h}
-layout laptop 'iTerm' move 2*${third};0 ${third};${h}
-default laptop count:1
-bind 7:e;ctrl layout laptop
-
 # # # # # # # # # # # # # # # # # # # #
 #        Application-specific         #
 # # # # # # # # # # # # # # # # # # # #
@@ -62,26 +41,11 @@ bind 7:e;ctrl layout laptop
 bind h:e;ctrl  focus left
 bind l:e;ctrl  focus right
 
-bind t:e;ctrl focus 'iTerm'
-bind c:e;ctrl focus 'Google Chrome'
-bind p:e;ctrl focus 'Preview'
-bind a:e;ctrl focus 'Adium'
-bind f:e;ctrl focus 'Finder'
-bind g:e;ctrl focus 'Mail'
-bind x:e;ctrl focus 'Microsoft Excel'
-bind d:e;ctrl focus 'Microsoft Word'
-bind o:e;ctrl focus 'Microsoft Outlook'
-bind m:e;ctrl focus 'Mou'
-bind i:e;ctrl focus 'iTunes'
-bind w:e;ctrl focus 'VMware Fusion'
-bind v:e;ctrl focus 'Cisco AnyConnect Secure Mobility Client'
-
 # # # # # # # # # # # # # # # # # # # #
 #               Slate                 #
 # # # # # # # # # # # # # # # # # # # #
 
-bind e:e;ctrl   hint
 bind r:cmd;ctrl relaunch
-bind s:cmd;ctrl snapshot mySlate save-to-disk;stack
-bind q:e;ctrl   grid padding:5 0:3,2
+# bind e:e;ctrl   hint
+# bind q:e;ctrl   grid padding:5 0:3,2
 # bind tab:cmd switch
