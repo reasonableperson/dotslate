@@ -35,13 +35,6 @@ bind j:e;ctrl  push down
 # bind ]:e;ctrl shell '/usr/bin/osascript -e "tell application \"System Events\" to key code 30 using control down"'
 
 # # # # # # # # # # # # # # # # # # # #
-#        Application-specific         #
-# # # # # # # # # # # # # # # # # # # #
-
-bind h:e;ctrl  focus left
-bind l:e;ctrl  focus right
-
-# # # # # # # # # # # # # # # # # # # #
 #               Slate                 #
 # # # # # # # # # # # # # # # # # # # #
 
