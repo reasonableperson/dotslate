@@ -90,7 +90,9 @@ slate.bind "8:e;ctrl", slate.operation('layout', {name: 'work'})
 #        Application-specific         #
 # # # # # # # # # # # # # # # # # # # #
 
-customBindingMap =
+# These keys will preferentially take you to the given app,
+# even though it doesn't start with that letter.
+priorityBindings =
     c: 'Google Chrome'
     x: 'Microsoft Excel'
     d: 'Microsoft Word'
@@ -101,75 +103,63 @@ customBindingMap =
     w: 'Microsoft Remote Desktop'
     v: 'Cisco AnyConnect Secure Mobility Client'
 
-# Find apps beginning with the given letter.
+# Find apps that could be selected using the given key.
 filterApps = (key) ->
     result = []
     priorityApp = null
     slate.eachApp (a) ->
         if not a
             return false
-        if customBindingMap[key] == a.name()
+        if priorityBindings[key] == a.name()
             priorityApp = a
             result.push(a)
         if a.name()[0].toLowerCase() == key
             result.push(a)
-    slate.log "Possible apps:", (a.name() for a in result)
     return [result, priorityApp]
 
-chooseApp = (apps, priorityApp, currentWin, key) ->
-    if not currentWin
-        return priorityApp
-    if not currentWin.app().pid() in (a.pid() for a in apps)
-        return priorityApp
-    else
-        apps = (a for a in apps when getWins(a).length > 0)
-        return apps.slice(-1)[0]
-
+# Collect all windows in a list.
 getWins = (app) ->
-    windows = []
-    app.eachWindow (w) -> windows.push(w)
-    return windows
+    w = []
+    app.eachWindow (me) -> w.push(me)
+    return w
 
-chooseWin = (app, currentWin) ->
-    wins = getWins app
-    slate.log 'windows:', (w.title() for w in wins)
-    if wins[0].app().pid() is currentWin.app().pid()
-        slate.log 'returning last window'
-        return wins.slice(-1)[0]
+# If we're in the same letter group as the priority app, cycle
+# through all apps with visible windows (to avoid getting stuck
+# on the priority app). Otherwise, choose the priority app. If
+# there is no priority app, choose the first app with windows,
+# or just the first app, or nothing.
+chooseApp = (apps, priorityApp, curWin) ->
+    appsWithWindows = (a for a in apps when getWins(a).length > 0)
+    if curWin and curWin.app().pid() in (a.pid() for a in apps)
+        return appsWithWindows.slice(-1)[0]
+    else if priorityApp
+        return priorityApp
+    else if appsWithWindows.length > 0
+        return appsWithWindows[0]
+    else if apps.length > 0
+        return apps[0]
     else
-        slate.log 'returning first window'
-        return wins[0]
+        return null
 
-# Choose an app window and focus it.
-focusWindow = (key, win) ->
-    if win then winName = win.app().name()
-    else        winName = "(none)"
+# Command handler.
+focusApp = (key, win) ->
+    winName = win ? win.app().name() or "(none)"
+    slate.log "keypress: #{key}, sourceWindow: #{win}"
 
-    slate.log "keypress: #{key}, sourceWindow: #{winName}"
     [apps, priorityApp] = filterApps key
+    slate.log "Possible apps:", (a.name() for a in apps)
 
-    if apps.length == 0
+    app = chooseApp apps, priorityApp, win
+    if not app
         slate.log "Tried to switch to an app with no binding."
-        return
-
-    app = chooseApp apps, priorityApp, win, key
-    slate.log "Target app", app.name()
-    win = chooseWin app, win
-    if win
-        slate.log "Target window", win.title()
-        win.focus()
     else
-        slate.log "No window to target"
-        op = slate.operation "focus", {app: app}
-        op.run()
+        slate.log "Target app", app.name()
+        (slate.operation "focus", {app: app}).run()
 
-
-# func to bind a key in command mode
+# Bind all letters of the alphabet to focusApp
+ex = ['r', 'j', 'k'] # except these keys
+chr = (int) -> String.fromCharCode(x)
 bindKey = (key, app) ->
     bindStr = "#{key}:e;ctrl"
-    slate.bind bindStr, (win) -> focusWindow key, win
-
-# bind all letters of the alphabet
-ex = ['r', 'j', 'k'] # don't bind these keys
-chr = (int) -> String.fromCharCode(x)
+    slate.bind bindStr, (win) -> focusApp key, win
 bindKey k for k in (chr x for x in [97..122] when chr x not in ex)
