@@ -4,9 +4,6 @@ slate.log "Running dotslate.coffee."
 #          Resize + Throw             #
 # # # # # # # # # # # # # # # # # # # #
 
-# Fix JS's buggy modulo function.
-mod = (n, m) -> ((n % m) + m) % m
-
 # What edges is this window close to? 
 closeEdges = (win) ->
     scr = win.screen().rect()
@@ -59,6 +56,7 @@ bindFrac 1, q for q in [1, 2, 3, 4]
 bindFrac p, q for [p, q] in [[2, 3], [3, 4]]
 
 # Throw + fractional resize
+modulo = (n, m) -> ((n % m) + m) % m
 throwPreservingFrac = (increment) ->
     (win) ->
         scr = win.screen().rect()
@@ -66,7 +64,8 @@ throwPreservingFrac = (increment) ->
         widescreen = scr.width > scr.height
         dim = if widescreen then 'width' else 'height'
         proportion = wrc[dim] / scr[dim]
-        screenId = mod(slate.screen().id() + increment, slate.screenCount())
+        numScreens = slate.screenCount()
+        screenId = modulo slate.screen().id()+increment, numScreens
         slate.log 'throwing', screenId
         resizeFrac(proportion, 1, screenId) win
 
@@ -87,20 +86,18 @@ work = slate.layout 'work',
 slate.bind "8:e;ctrl", slate.operation('layout', {name: 'work'})
 
 # # # # # # # # # # # # # # # # # # # #
-#        Application-specific         #
+#              App-switcher           #
 # # # # # # # # # # # # # # # # # # # #
 
 # These keys will preferentially take you to the given app,
 # even though it doesn't start with that letter.
 priorityBindings =
-    c: 'Google Chrome'
     x: 'Microsoft Excel'
     d: 'Microsoft Word'
     o: 'Microsoft Outlook'
-    i: 'iTunes'
+    r: 'Microsoft Remote Desktop'
     t: 'iTerm'
     w: 'VMware Fusion'
-    w: 'Microsoft Remote Desktop'
     v: 'Cisco AnyConnect Secure Mobility Client'
 
 # Find apps that could be selected using the given key.
@@ -157,9 +154,11 @@ focusApp = (key, win) ->
         (slate.operation "focus", {app: app}).run()
 
 # Bind all letters of the alphabet to focusApp
-ex = ['r', 'j', 'k'] # except these keys
-chr = (int) -> String.fromCharCode(x)
 bindKey = (key, app) ->
     bindStr = "#{key}:e;ctrl"
     slate.bind bindStr, (win) -> focusApp key, win
-bindKey k for k in (chr x for x in [97..122] when chr x not in ex)
+ex = ['r', 'j', 'k'] # except these keys
+chr = (int) -> String.fromCharCode(x)
+letters = (chr x for x in [97..122] when chr x not in ex)
+numbers = (x.toString() for x in [0..9])
+bindKey k for k in letters.concat numbers

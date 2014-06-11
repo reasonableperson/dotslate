@@ -1,44 +1,21 @@
-# # # # # # # # # # # # # # # # # # # #
-#              Aliases                #
-# # # # # # # # # # # # # # # # # # # #
-
-alias half  screenSizeX/2
-alias third screenSizeX/3
-alias ox    screenOriginX
-alias w     screenSizeX
-alias h     screenSizeY
-
-# # # # # # # # # # # # # # # # # # # #
-#         Window positioning          #
-# # # # # # # # # # # # # # # # # # # #
-
-# Resize
+# Incremental resize
 bind right:cmd;ctrl resize +64 +0
 bind left:cmd;ctrl  resize -64 +0
 bind down:cmd;ctrl resize  +0   +64
 bind up:cmd;ctrl  resize   +0   -64
 
-# Nudge (move)
+# Incremental move
 bind right:cmd;ctrl;shift  nudge +64 +0
 bind left:cmd;ctrl;shift   nudge -64 +0
 bind up:cmd;ctrl;shift     nudge +0 -64
 bind down:cmd;ctrl;shift   nudge +0 +64
 
-# Throw to edge
-bind ]:e;ctrl  push right
-bind [:e;ctrl  push left
-bind k:e;ctrl  push up
-bind j:e;ctrl  push down
-
-# Spaces
-# bind [:e;ctrl shell '/usr/bin/osascript -e "tell application \"System Events\" to key code 33 using control down"'
-# bind ]:e;ctrl shell '/usr/bin/osascript -e "tell application \"System Events\" to key code 30 using control down"'
-
-# # # # # # # # # # # # # # # # # # # #
-#               Slate                 #
-# # # # # # # # # # # # # # # # # # # #
+# Push to edge or center
+bind ]:e;ctrl       push right
+bind [:e;ctrl       push left
+bind k:e;ctrl       push up
+bind j:e;ctrl       push down
+bind =:e;ctrl       move screenOriginX+(screenSizeX-windowSizeX)/2;0 windowSizeX;windowSizeY
+bind =:e;ctrl;cmd   move screenOriginX;screenOriginY+(screenSizeY-windowSizeY)/2 windowSizeX;windowSizeY
 
 bind r:cmd;ctrl relaunch
-# bind e:e;ctrl   hint
-# bind q:e;ctrl   grid padding:5 0:3,2
-# bind tab:cmd switch
