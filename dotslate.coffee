@@ -92,10 +92,7 @@ slate.bind "8:e;ctrl", slate.operation('layout', {name: 'work'})
 # These keys will preferentially take you to the given app,
 # even though it doesn't start with that letter.
 priorityBindings =
-    x: 'Microsoft Excel'
-    d: 'Microsoft Word'
-    o: 'Microsoft Outlook'
-    r: 'Microsoft Remote Desktop'
+    x: 'Excel'
     t: 'iTerm'
     w: 'VMware Fusion'
     v: 'Cisco AnyConnect Secure Mobility Client'
@@ -107,10 +104,13 @@ filterApps = (key) ->
     slate.eachApp (a) ->
         if not a
             return false
-        if priorityBindings[key] == a.name()
+        name = a.name()
+        if name.split(' ')[0] == 'Microsoft'
+            name = name.split(' ').slice(1).join(' ')
+        if name == priorityBindings[key]
             priorityApp = a
             result.push(a)
-        if a.name()[0].toLowerCase() == key
+        if name[0].toLowerCase() == key
             result.push(a)
     return [result, priorityApp]
 
@@ -140,8 +140,9 @@ chooseApp = (apps, priorityApp, curWin) ->
 
 # Command handler.
 focusApp = (key, win) ->
-    winName = win ? win.app().name() or "(none)"
-    slate.log "keypress: #{key}, sourceWindow: #{win}"
+    if win and win.app then winName = win.app().name()
+    else                    winName = "(none)"
+    slate.log "keypress: #{key}, sourceWindow: #{winName}"
 
     [apps, priorityApp] = filterApps key
     slate.log "Possible apps:", (a.name() for a in apps)
