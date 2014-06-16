@@ -8,13 +8,16 @@ slate.log "Running dotslate.coffee."
 closeEdges = (win) ->
     scr = win.screen().rect()
     wrc = win.rect()
-    proximity =
-        left:   wrc.x - scr.x
-        right:  wrc.x + wrc.width - scr.x - scr.width
-        top:    wrc.y - scr.y - 22 # menu bar
-        bottom: wrc.y + wrc.height - scr.y - scr.height
+    midpoint = (rect, axis) ->
+        dir = if axis is 'x' then 'width' else 'height'
+        return rect[axis] + rect[dir]/2
+    proximate_to =
+        left:   midpoint(wrc, 'x') <= midpoint(scr, 'x')
+        right:  midpoint(wrc, 'x') >  midpoint(scr, 'x')
+        top:    midpoint(wrc, 'y') <= midpoint(scr, 'y')
+        bottom: midpoint(wrc, 'y') >  midpoint(scr, 'y')
     # slate.log "Proximity object: #{JSON.stringify(proximity)}"
-    (edge for edge, prox of proximity when Math.abs(prox) < 10)
+    (edge for edge, bool of proximate_to when bool)
 
 # Factory for functions that resize a window as a proportion of
 # its current screen's dimensions.
